@@ -1,10 +1,10 @@
 //
-//  TKAppDelegate.h
-//  Created by Devin Ross on 1/31/11.
+//  DataTests.h
+//  Created by Devin Ross on 12/29/12.
 //
 /*
  
- tapku.com || http://github.com/devinross/tapkulibrary
+ tapku.com || https://github.com/devinross/tapkulibrary
  
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -29,30 +29,10 @@
  
  */
 
+#import <SenTestingKit/SenTestingKit.h>
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import "NSObject+TKCategory.h"
 
-@class TKWindow;
-
-/** This class allocates a TKWindow instance and provides a convience method for application launching. */
-@interface TKAppDelegate : NSObject <UIApplicationDelegate> 
-
-// For subclassing, default implentation does nothing.
-// These methods are called upon open & closing respectively regardless.
-// Good for placing instructions needed regardless of multi-tasking
-
-
-/** This is a convience method for placing any functionality that might be called upon initial launch of the application and any subsequent relaunch from a background state. Default implementation does nothing.
- @param application The application instance.
- */
-- (void) applicationDidStartup:(UIApplication *)application;
-
-
-///----------------------------
-/// @name Properties
-///----------------------------
-
-/** Returns the application main window. */
-@property (nonatomic,strong) UIWindow *window;
+@interface DataTests : SenTestCase
 
 @end

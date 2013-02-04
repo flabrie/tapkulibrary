@@ -1,6 +1,6 @@
 //
-//  TKAppDelegate.h
-//  Created by Devin Ross on 1/31/11.
+//  NSObject+TKCategory.h
+//  Created by Devin Ross on 12/29/12.
 //
 /*
  
@@ -30,29 +30,34 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 
-@class TKWindow;
+@interface NSObject (TKCategory)
 
-/** This class allocates a TKWindow instance and provides a convience method for application launching. */
-@interface TKAppDelegate : NSObject <UIApplicationDelegate> 
-
-// For subclassing, default implentation does nothing.
-// These methods are called upon open & closing respectively regardless.
-// Good for placing instructions needed regardless of multi-tasking
-
-
-/** This is a convience method for placing any functionality that might be called upon initial launch of the application and any subsequent relaunch from a background state. Default implementation does nothing.
- @param application The application instance.
+/** For subclassing, this method should return the item's properties mapped to the data dictionary keys.
+ See the DataTests.m for an example implementation.
+ 
+	
+	 @{
+	 @"identifier" : @"id",
+	 @"name" : @"name",
+	 @"createdAt" : @[@"created_at",@"yyyy-MM-dd'T'HH:mm:ss"], // For NSDate
+	 @"updatedAt" : @[@"updated_at",@"yyyy-MM-dd"]
+	 };
+ 
+ 
+ @returns The dictionary used to fill up data from the data dictionary.
  */
-- (void) applicationDidStartup:(UIApplication *)application;
++ (NSDictionary*) dataKeys;
+
++ (id) createObject:(NSDictionary*)data;
 
 
-///----------------------------
-/// @name Properties
-///----------------------------
 
-/** Returns the application main window. */
-@property (nonatomic,strong) UIWindow *window;
+
+/** Imports data from an `NSDictionary` objects using the map provided by the dataKeys dictionary.
+ 
+ @param dictionary The data that will be imported.
+ */
+- (void) importDataWithDictionary:(NSDictionary*)dictionary;
 
 @end
