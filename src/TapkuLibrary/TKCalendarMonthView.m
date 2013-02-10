@@ -834,7 +834,6 @@
 	
 	if([month isEqualToDate:[currentTile monthDate]]){
 		[currentTile selectDay:info.day];
-		return;
 	}else {
 		
 		if ([self.delegate respondsToSelector:@selector(calendarMonthView:monthShouldChange:animated:)] && ![self.delegate calendarMonthView:self monthShouldChange:month animated:YES] )
@@ -862,9 +861,10 @@
 		
 		if([self.delegate respondsToSelector:@selector(calendarMonthView:monthDidChange:animated:)])
 			[self.delegate calendarMonthView:self monthDidChange:date animated:NO];
-		
-		
 	}
+
+	if([self.delegate respondsToSelector:@selector(calendarMonthView:didSelectDate:)])
+		[self.delegate calendarMonthView:self didSelectDate:date];
 }
 - (void) reload{
 	NSArray *dates = [TKCalendarMonthTiles rangeOfDatesInMonthGrid:[currentTile monthDate] startOnSunday:sunday];
