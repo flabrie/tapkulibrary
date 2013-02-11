@@ -829,18 +829,22 @@
 	return [currentTile monthDate];
 }
 - (void) selectDate:(NSDate*)date{
+	[self selectDate:date animated:NO];
+}
+- (void) selectDate:(NSDate*)date animated:(BOOL)animated{
 	TKDateInformation info = [date dateInformationWithTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
 	NSDate *month = [date firstOfMonth];
+	NSComparisonResult monthComparison = [month compare:[currentTile monthDate]];
 	
-	if([month isEqualToDate:[currentTile monthDate]]){
+	if(monthComparison == NSOrderedSame){
 		[currentTile selectDay:info.day];
 	}else {
 		
-		if ([self.delegate respondsToSelector:@selector(calendarMonthView:monthShouldChange:animated:)] && ![self.delegate calendarMonthView:self monthShouldChange:month animated:YES] )
+		if ([self.delegate respondsToSelector:@selector(calendarMonthView:monthShouldChange:animated:)] && ![self.delegate calendarMonthView:self monthShouldChange:month animated:animated] )
 			return;
 		
 		if ([self.delegate respondsToSelector:@selector(calendarMonthView:monthWillChange:animated:)] )
-			[self.delegate calendarMonthView:self monthWillChange:month animated:YES];
+			[self.delegate calendarMonthView:self monthWillChange:month animated:animated];
 		
 		
 		NSArray *dates = [TKCalendarMonthTiles rangeOfDatesInMonthGrid:month startOnSunday:sunday];
@@ -848,19 +852,39 @@
 		TKCalendarMonthTiles *newTile = [[TKCalendarMonthTiles alloc] initWithMonth:month 
 																			  marks:data 
 																   startDayOnSunday:sunday];
-		[newTile setTarget:self action:@selector(tile:)];
-		[currentTile removeFromSuperview];
-		currentTile = newTile;
-		[self.tileBox addSubview:currentTile];
-		self.tileBox.frame = CGRectMake(0, 44, newTile.frame.size.width, newTile.frame.size.height);
-		self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.bounds.size.width, self.tileBox.frame.size.height+self.tileBox.frame.origin.y);
 
-		self.shadow.frame = CGRectMake(0, self.frame.size.height-self.shadow.frame.size.height+21, self.shadow.frame.size.width, self.shadow.frame.size.height);
-		self.monthYear.text = [date monthYearString];
+		NSCalendar *calendar = [NSCalendar currentCalendar];
+		NSDateComponents *dateComponents = [calendar components:(NSMonthCalendarUnit | NSDayCalendarUnit)
+													   fromDate:[currentTile monthDate]
+														 toDate:month
+														options:0];
+		NSInteger monthCount = [dateComponents month];
+		NSInteger dayCount = [dateComponents day];
+
+		if(dayCount != 0) {
+			monthCount = (monthCount + (dayCount / abs(dayCount)));
+			dayCount = 0;
+		}
+
+		if(animated && (abs(monthCount) == 1)) {
+			UIButton *button = (monthComparison == NSOrderedDescending) ? self.rightArrow : self.leftArrow;
+			[self changeMonthAnimation:button];
+		}else {
+			[newTile setTarget:self action:@selector(tile:)];
+			[currentTile removeFromSuperview];
+			currentTile = newTile;
+
+			[self.tileBox addSubview:currentTile];
+			self.tileBox.frame = CGRectMake(0, 44, newTile.frame.size.width, newTile.frame.size.height);
+			self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.bounds.size.width, self.tileBox.frame.size.height+self.tileBox.frame.origin.y);
+
+			self.shadow.frame = CGRectMake(0, self.frame.size.height-self.shadow.frame.size.height+21, self.shadow.frame.size.width, self.shadow.frame.size.height);
+			self.monthYear.text = [date monthYearString];
+		}
 		[currentTile selectDay:info.day];
 		
 		if([self.delegate respondsToSelector:@selector(calendarMonthView:monthDidChange:animated:)])
-			[self.delegate calendarMonthView:self monthDidChange:date animated:NO];
+			[self.delegate calendarMonthView:self monthDidChange:date animated:animated];
 	}
 
 	if([self.delegate respondsToSelector:@selector(calendarMonthView:didSelectDate:)])

@@ -71,10 +71,16 @@
  */
 - (NSDate*) monthDate;
 
-/** Selects a specific date in the month grid. 
+/** Selects a specific date in the month grid. Any change will not be animated.
  @param date The date that will be highlighed.
  */
 - (void) selectDate:(NSDate*)date;
+
+/** Selects a specific date in the month grid. 
+ @param date The date that will be highlighed.
+ @param animated Animation flag
+ */
+- (void) selectDate:(NSDate*)date animated:(BOOL)animated;
 
 /** Reloads the current month grid. */
 - (void) reload;
