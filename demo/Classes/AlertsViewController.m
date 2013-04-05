@@ -31,7 +31,7 @@
 
 #import "AlertsViewController.h"
 
-
+#pragma mark - AlertsViewController
 @implementation AlertsViewController
 
 - (id) init{
@@ -43,12 +43,10 @@
     return YES;
 }
 
-#pragma mark - View Lifecycle
+#pragma mark View Lifecycle
 - (void) loadView{
 	[super loadView];
 	self.view.backgroundColor = [UIColor whiteColor];
-	
-	
 	
 	UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"Tap Me" style:UIBarButtonItemStyleBordered target:self action:@selector(beer)];
 	if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
@@ -57,15 +55,42 @@
 		self.toolbarItems = @[item];
 	}
 	
+	
+	self.tapMeItem = item;
+	item.enabled = NO;
+	
 }
 - (void) viewDidAppear:(BOOL)animated{
 	[super viewDidAppear:animated];
 	
+	
+	[self performSelector:@selector(showKeyboardAlerts) withObject:nil afterDelay:5.0];
 	[[TKAlertCenter defaultCenter] postAlertWithMessage:@"Hi!"];
 	[[TKAlertCenter defaultCenter] postAlertWithMessage:@"This is the alert system"];
 	[[TKAlertCenter defaultCenter] postAlertWithMessage:@"Use images too!" image:[UIImage imageNamed:@"beer"]];
 
 }
+
+- (void) showKeyboardAlerts{
+	
+	self.hiddenTextField = [[UITextField alloc] initWithFrame:CGRectZero];
+	[self.view addSubview:self.hiddenTextField];
+	
+	[self.hiddenTextField becomeFirstResponder];
+	
+	[[TKAlertCenter defaultCenter] postAlertWithMessage:@"Hi!"];
+	[[TKAlertCenter defaultCenter] postAlertWithMessage:@"This is the alert system"];
+	[[TKAlertCenter defaultCenter] postAlertWithMessage:@"Use images too!" image:[UIImage imageNamed:@"beer"]];
+	[self performSelector:@selector(completedKeyboard) withObject:nil afterDelay:5.0];
+
+}
+
+- (void) completedKeyboard{
+	
+	[self.hiddenTextField resignFirstResponder];
+	self.tapMeItem.enabled = YES;
+}
+
 
 - (void) beer{
 	[[TKAlertCenter defaultCenter] postAlertWithMessage:@"Beer!" image:[UIImage imageNamed:@"beer"]];
