@@ -51,10 +51,6 @@
 	[self importDataWithDictionary:dictionary];
 	return self;
 }
-
-
-
-
 - (void) importDataWithDictionary:(NSDictionary*)dictionary{
 	
 	
@@ -63,11 +59,11 @@
 	
 	for(NSString *dataKey in [dataKeys allKeys]){
 		
-		id value = [dataKeys objectForKey:dataKey];
+		id value = dataKeys[dataKey];
 		
 		if([value isKindOfClass:[NSString class]]){
 			
-			id obj = [dictionary objectForKey:[dataKeys objectForKey:dataKey]];
+			id obj = dictionary[dataKeys[dataKey]];
 			if(VALID_OBJECT(obj)) [self setValue:obj forKey:dataKey];
 			
 		}else if([value isKindOfClass:[NSArray class]]){
@@ -78,7 +74,7 @@
 			if(VALID_OBJECT(format) && VALID_OBJECT(key)){
 				if(!formatter) formatter = [[NSDateFormatter alloc] init];
 				[formatter setDateFormat:format];
-				NSDate *date = [formatter dateFromString:[dictionary objectForKey:key]];
+				NSDate *date = [formatter dateFromString:dictionary[key]];
 				[self setValue:date forKey:dataKey];
 			}
 			
@@ -87,5 +83,103 @@
 	}
 	
 }
+
+
+
+#pragma mark Process JSON in Background
+
+- (void) processJSONDataInBackground:(NSData *)data withCallbackSelector:(SEL)callback{
+	
+	[self processJSONDataInBackground:data
+				 withCallbackSelector:callback
+				   backgroundSelector:nil
+						errorSelector:nil
+					   readingOptions:0];
+	
+}
+
+- (void) processJSONDataInBackground:(NSData *)data withCallbackSelector:(SEL)callback readingOptions:(NSJSONReadingOptions)options{
+	
+	[self processJSONDataInBackground:data
+				 withCallbackSelector:callback
+				   backgroundSelector:nil
+						errorSelector:nil
+					   readingOptions:options];
+	
+}
+
+- (void) processJSONDataInBackground:(NSData *)data withCallbackSelector:(SEL)callback backgroundSelector:(SEL)backgroundProcessor readingOptions:(NSJSONReadingOptions)options{
+	
+	[self processJSONDataInBackground:data
+				 withCallbackSelector:callback
+				   backgroundSelector:backgroundProcessor
+						errorSelector:nil
+					   readingOptions:options];
+	
+}
+
+- (void) processJSONDataInBackground:(NSData *)data withCallbackSelector:(SEL)callback backgroundSelector:(SEL)backgroundProcessor errorSelector:(SEL)errroSelector{
+	
+	[self processJSONDataInBackground:data
+				 withCallbackSelector:callback
+				   backgroundSelector:backgroundProcessor
+						errorSelector:errroSelector
+					   readingOptions:0];
+	
+}
+
+
+- (void) processJSONDataInBackground:(NSData *)data
+				withCallbackSelector:(SEL)callback
+				  backgroundSelector:(SEL)backgroundProcessor
+					   errorSelector:(SEL)errroSelector
+					  readingOptions:(NSJSONReadingOptions)options{
+	
+	
+	NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+	
+	dict[@"data"] = data;
+	dict[@"flags"] = @(options);
+	
+
+	if(callback) dict[@"callback"] = NSStringFromSelector(callback);
+	if(backgroundProcessor) dict[@"backgroundProcessor"] = NSStringFromSelector(backgroundProcessor);
+	if(errroSelector) [dict setObject:NSStringFromSelector(errroSelector) forKey:@"errroSelector"];
+	
+	
+	[self performSelectorInBackground:@selector(_processJSONData:) withObject:dict];
+	
+	
+}
+
+
+- (void) _processJSONData:(NSDictionary*)dict{
+	@autoreleasepool {
+		NSError *error = nil;
+		
+		NSData *data = dict[@"data"];
+		NSUInteger options = [dict[@"flags"] unsignedIntValue];
+		
+		NSString *callback = dict[@"callback"];
+		NSString *background = dict[@"backgroundProcessor"];
+		NSString *eSelector = dict[@"errroSelector"];
+		
+		id object = [NSJSONSerialization JSONObjectWithData:data options:options error:&error];
+		
+		
+		
+		if(error && eSelector){
+			[self performSelector:NSSelectorFromString(eSelector) withObject:error];
+		}else if(!error){
+			if(background) object = [self performSelector:NSSelectorFromString(background) withObject:object];
+			[self performSelectorOnMainThread:NSSelectorFromString(callback) withObject:object waitUntilDone:NO];
+		}
+		
+		
+	}
+}
+
+
+
 
 @end
