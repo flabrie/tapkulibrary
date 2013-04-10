@@ -1030,10 +1030,28 @@ static UIImage *tileImage;
 			[self.delegate calendarMonthView:self monthWillChange:month animated:animated];
 		
 		
-		[self.currentTile removeFromSuperview];
-		self.currentTile = nil;
-		
-		[self _setupCurrentTileView:date];
+		NSCalendar *calendar = [NSCalendar currentCalendar];
+		NSDateComponents *dateComponents = [calendar components:(NSMonthCalendarUnit | NSDayCalendarUnit)
+													   fromDate:[self.currentTile monthDate]
+														 toDate:month
+														options:0];
+		NSInteger monthCount = [dateComponents month];
+		NSInteger dayCount = [dateComponents day];
+
+		if(dayCount != 0) {
+			monthCount = (monthCount + (dayCount / abs(dayCount)));
+			dayCount = 0;
+		}
+
+		if(animated && (abs(monthCount) == 1)) {
+			UIButton *button = (monthComparison == NSOrderedDescending) ? self.rightArrow : self.leftArrow;
+			[self changeMonthAnimation:button];
+		}else {
+			[self.currentTile removeFromSuperview];
+			self.currentTile = nil;
+
+			[self _setupCurrentTileView:date];
+		}
 		[self.currentTile selectDay:info.day];
 		
 		
