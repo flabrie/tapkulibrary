@@ -1015,20 +1015,26 @@ static UIImage *tileImage;
 		return [[NSDate date] monthDateWithTimeZone:self.timeZone];
 	return [self.currentTile monthDate];
 }
+
 - (BOOL) selectDate:(NSDate*)date{
+	return [self selectDate:date animated:NO];
+}
+
+- (BOOL) selectDate:(NSDate*)date animated:(BOOL)animated {
 	NSDateComponents *info = [date dateComponentsWithTimeZone:self.timeZone];
 	NSDate *month = [date firstOfMonthWithTimeZone:self.timeZone];
+    NSComparisonResult monthComparison = [month compare:[self.currentTile monthDate]];
 	
 	BOOL ret = NO;
-	if([month isEqualToDate:[self.currentTile monthDate]]){
+    if(monthComparison == NSOrderedSame){
 		ret = [self.currentTile selectDay:info.day];
 	}else {
 		
-		if ([self.delegate respondsToSelector:@selector(calendarMonthView:monthShouldChange:animated:)] && ![self.delegate calendarMonthView:self monthShouldChange:month animated:YES])
+		if ([self.delegate respondsToSelector:@selector(calendarMonthView:monthShouldChange:animated:)] && ![self.delegate calendarMonthView:self monthShouldChange:month animated:animated])
 			return NO;
 		
 		if ([self.delegate respondsToSelector:@selector(calendarMonthView:monthWillChange:animated:)] )
-			[self.delegate calendarMonthView:self monthWillChange:month animated:YES];
+			[self.delegate calendarMonthView:self monthWillChange:month animated:animated];
 		
 		
 		[self.currentTile removeFromSuperview];
@@ -1039,7 +1045,7 @@ static UIImage *tileImage;
 		
 		
 		if([self.delegate respondsToSelector:@selector(calendarMonthView:monthDidChange:animated:)])
-			[self.delegate calendarMonthView:self monthDidChange:date animated:NO];
+			[self.delegate calendarMonthView:self monthDidChange:date animated:animated];
 		
 		ret = [self.currentTile selectDay:info.day];
 		

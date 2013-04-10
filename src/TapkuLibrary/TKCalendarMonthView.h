@@ -90,7 +90,7 @@
  @param date The date that will be highlighed.
  @param animated Animation flag
  */
-- (void) selectDate:(NSDate*)date animated:(BOOL)animated;
+- (BOOL) selectDate:(NSDate*)date animated:(BOOL)animated;
 
 /** Reloads the current month grid. */
 - (void) reloadData;
