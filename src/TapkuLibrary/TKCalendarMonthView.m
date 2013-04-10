@@ -1042,7 +1042,6 @@ static UIImage *tileImage;
 
 		if(dayCount != 0) {
 			monthCount = (monthCount + (dayCount / abs(dayCount)));
-			dayCount = 0;
 		}
 
 		if(animated && (abs(monthCount) == 1)) {
