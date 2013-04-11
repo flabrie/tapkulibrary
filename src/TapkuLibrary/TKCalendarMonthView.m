@@ -741,6 +741,10 @@ static UIImage *tileImage;
 	self = [self initWithSundayAsFirst:YES];
 	return self;
 }
+- (id) initWithFrame:(CGRect)frame{
+	self = [self init];
+	return self;
+}
 
 - (void) didMoveToWindow{
 	if (self.window && !self.currentTile)
@@ -1016,6 +1020,8 @@ static UIImage *tileImage;
 }
 
 - (BOOL) selectDate:(NSDate*)date animated:(BOOL)animated {
+	if(date==nil) return NO;
+	
 	NSDateComponents *info = [date dateComponentsWithTimeZone:self.timeZone];
 	NSDate *month = [date firstOfMonthWithTimeZone:self.timeZone];
     NSComparisonResult monthComparison = [month compare:[self.currentTile monthDate]];
