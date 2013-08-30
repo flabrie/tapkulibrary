@@ -4,7 +4,7 @@
 //
 /*
  
- tapku.com || http://github.com/devinross/tapkulibrary
+ tapku || http://github.com/devinross/tapkulibrary
  
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -101,6 +101,11 @@
 	[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateTwirl) object:nil];
 	[self performSelector:@selector(updateTwirl) withObject:nil afterDelay:AnimationTimer];
 	
+}
+
+- (void) didMoveToWindow{
+	[self updateTwirl];
+	[self updateProgress];
 }
 
 

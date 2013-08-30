@@ -4,7 +4,7 @@
 //
 /*
  
- tapku.com || https://github.com/devinross/tapkulibrary
+ tapku || https://github.com/devinross/tapkulibrary
  
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -45,6 +45,7 @@
 #pragma mark View Lifecycle
 - (void) viewDidLoad{
 	[super viewDidLoad];
+	self.title = NSLocalizedString(@"Month Grid", @"");
 	[self.monthView selectDate:[NSDate date]];
 }
 
@@ -106,11 +107,11 @@
 		
 		NSInteger r = arc4random();
 		if(r % 3==1){
-			[self.dataDictionary setObject:@[@"Item one",@"Item two"] forKey:d];
+			(self.dataDictionary)[d] = @[@"Item one",@"Item two"];
 			[self.dataArray addObject:@YES];
 			
 		}else if(r%4==1){
-			[self.dataDictionary setObject:@[@"Item one"] forKey:d];
+			(self.dataDictionary)[d] = @[@"Item one"];
 			[self.dataArray addObject:@YES];
 			
 		}else

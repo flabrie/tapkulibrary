@@ -1,6 +1,6 @@
 /*
  
- tapku.com || http://github.com/devinross/tapkulibrary
+ tapku || http://github.com/devinross/tapkulibrary
  
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -32,14 +32,18 @@
 #import "NSString+TKCategory.h"
 #import "NSDate+TKCategory.h"
 #import "NSArray+TKCategory.h"
+#import "NSMutableArray+TKCategory.h"
+#import "UIDevice+TKCategory.h"
 #import "UIView+TKCategory.h"
 #import "UIImage+TKCategory.h"
 #import "UIColor+TKCategory.h"
 #import "UIImageView+TKCategory.h"
 #import "UIScrollview+TKCategory.h"
 #import "UIButton+TKCategory.h"
-
-
+#import "UITextField+TKCategory.h"
+#import "UIImagePickerController+TKCategory.h"
+#import "UIViewController+TKCategory.h"
+#import "TKWebViewController.h"
 
 #import "TKWindow.h"
 #import "TKViewController.h"
@@ -50,12 +54,16 @@
 #import "TKAppDelegate.h"
 #import "TKGradientView.h"
 #import "TKShapeView.h"
+#import "TKTextView.h"
+#import "TKSlideToUnlockView.h"
 
 
 #import "TKNetworkQueue.h"
 #import "TKHTTPRequest.h"
 #import "TKImageCache.h"
 
+
+#import "TKGlowButton.h"
 
 
 // CELLS
@@ -65,6 +73,7 @@
 #import "TKLabelFieldCell.h"
 #import "TKLabelSwitchCell.h"
 #import "TKButtonCell.h"
+#import "TKTextFieldCell.h"
 #import "TKTextViewCell.h"
 #import "TKSwitchCell.h"
 #import "TKTableViewCell.h"
@@ -75,7 +84,7 @@
 #import "TKProgressBarView.h"
 #import "TKProgressAlertView.h"
 #import "TKProgressCircleView.h"
-
+#import "TKLoadingView.h"
 
 
 
@@ -87,3 +96,6 @@
 
 // Coverflow
 #import "TKCoverflowView.h"
+
+
+#import "TKReorderTableView.h"

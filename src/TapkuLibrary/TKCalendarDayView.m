@@ -3,7 +3,7 @@
 //  Created by Devin Ross on 7/28/09.
 /*
  
- tapku.com || http://github.com/devinross/tapkulibrary
+ tapku || http://github.com/devinross/tapkulibrary
  
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -429,7 +429,6 @@
 	CGFloat startMarker = -100.0f;	// starting point to check if they match
 	CGFloat endMarker = -100.0f;
 	
-	CGFloat startMarkerHeight = 0;
 	
 	CGFloat topOrigin = -1;
 	
@@ -468,11 +467,10 @@
 		
 		
 		
-		
 		// nobre additions - split control and offset control				
 		// split control - adjusts balloon widths so their times/titles don't overlap
 		// offset control - adjusts starting balloon position so you can see all starts/ends
-		if ((hourStartPosition + minuteStartPosition) - startMarker - startMarkerHeight < 0) {
+		if ((hourStartPosition + minuteStartPosition) - startMarker < 1) {
 			repeatNumber++;
 		} else {
 			repeatNumber = 0;
@@ -518,8 +516,6 @@
 			topOrigin = startMarker;
 		
 		topOrigin = MIN(topOrigin,startMarker);
-		
-		startMarkerHeight = [event contentHeight];
 		
 	}
 	

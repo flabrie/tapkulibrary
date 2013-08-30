@@ -4,7 +4,7 @@
 //
 /*
  
- tapku.com || http://github.com/devinross/tapkulibrary
+ tapku || http://github.com/devinross/tapkulibrary
  
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -56,7 +56,7 @@
 	self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	
 	
-	self.coverflow = [[TKCoverflowView alloc] initWithFrame:self.view.bounds deleclerationRate:UIScrollViewDecelerationRateFast];
+	self.coverflow = [[TKCoverflowView alloc] initWithFrame:self.view.bounds];
 	self.coverflow.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	self.coverflow.coverflowDelegate = self;
 	self.coverflow.coverflowDataSource = self;

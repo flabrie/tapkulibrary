@@ -4,7 +4,7 @@
 //
 /*
  
- tapku.com || http://github.com/devinross/tapkulibrary
+ tapku || http://github.com/devinross/tapkulibrary
  
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -39,7 +39,7 @@
 
 
 + (NSDictionary*) dataKeys{
-	return [NSDictionary dictionary];
+	return @{};
 }
 
 
@@ -71,7 +71,7 @@
 			NSString *format = [value lastObject];
 			NSString *key = [value firstObject];
 			
-			if(VALID_OBJECT(format) && VALID_OBJECT(key)){
+			if(VALID_OBJECT(format) && VALID_OBJECT(key) && VALID_OBJECT(dictionary[key])){
 				if(!formatter) formatter = [[NSDateFormatter alloc] init];
 				[formatter setDateFormat:format];
 				NSDate *date = [formatter dateFromString:dictionary[key]];
@@ -84,6 +84,32 @@
 	
 }
 
+
+- (NSDictionary*) dataDictionary{
+	
+	NSDateFormatter *formatter = nil;
+	NSMutableDictionary *ret = [NSMutableDictionary dictionary];
+	NSDictionary *dataKeys = [[self class] dataKeys];
+	
+	for(id key in [dataKeys allKeys]){
+		
+		id value = [self valueForKey:key];
+		
+		if(value && [value isKindOfClass:[NSDate class]]){
+			NSArray *array = dataKeys[key];
+			
+			if(!formatter) formatter = [[NSDateFormatter alloc] init];
+			formatter.dateFormat = array.lastObject;
+			
+			NSString *date = [formatter stringFromDate:value];
+			ret[array[0]] = date;
+		}else if(value)
+			ret[dataKeys[key]] = value;
+		
+	}
+	return ret;
+	
+}
 
 
 #pragma mark Process JSON in Background
@@ -144,7 +170,7 @@
 
 	if(callback) dict[@"callback"] = NSStringFromSelector(callback);
 	if(backgroundProcessor) dict[@"backgroundProcessor"] = NSStringFromSelector(backgroundProcessor);
-	if(errroSelector) [dict setObject:NSStringFromSelector(errroSelector) forKey:@"errroSelector"];
+	if(errroSelector) dict[@"errroSelector"] = NSStringFromSelector(errroSelector);
 	
 	
 	[self performSelectorInBackground:@selector(_processJSONData:) withObject:dict];

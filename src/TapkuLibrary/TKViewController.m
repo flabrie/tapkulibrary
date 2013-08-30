@@ -4,7 +4,7 @@
 //
 /*
  
- tapku.com || http://github.com/devinross/tapkulibrary
+ tapku || http://github.com/devinross/tapkulibrary
  
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -32,6 +32,12 @@
 #import "TKViewController.h"
 #import "TKHTTPRequest.h"
 #import "NSArray+TKCategory.h"
+
+@interface TKViewController () {
+	NSMutableArray *_activeRequests;
+}
+
+@end
 
 @implementation TKViewController
 

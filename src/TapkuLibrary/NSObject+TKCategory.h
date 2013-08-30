@@ -4,7 +4,7 @@
 //
 /*
  
- tapku.com || http://github.com/devinross/tapkulibrary
+ tapku || http://github.com/devinross/tapkulibrary
  
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
@@ -39,10 +39,10 @@
  
 	
 	 @{
-	 @"identifier" : @"id",
-	 @"name" : @"name",
-	 @"createdAt" : @[@"created_at",@"yyyy-MM-dd'T'HH:mm:ss"], // For NSDate
-	 @"updatedAt" : @[@"updated_at",@"yyyy-MM-dd"]
+		@"identifier" : @"id",
+		@"name" : @"name",
+		@"createdAt" : @[@"created_at",@"yyyy-MM-dd'T'HH:mm:ss"], // For NSDate
+		@"updatedAt" : @[@"updated_at",@"yyyy-MM-dd"]
 	 };
  
  
@@ -60,11 +60,17 @@
 + (id) createObject:(NSDictionary*)dictionary;
 
 
+- (id) initWithDataDictionary:(NSDictionary*)dictionary;
+
+
 /** Imports data from an `NSDictionary` objects using the map provided by the dataKeys dictionary.
  
  @param dictionary The data that will be imported.
  */
 - (void) importDataWithDictionary:(NSDictionary*)dictionary;
+
+
+- (NSDictionary*) dataDictionary;
 
 
 
